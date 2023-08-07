@@ -2,14 +2,7 @@ import csv
 import fortran_lib
 from colorama import Fore
 from math import floor
-
-DATA = {
-    "dataname": "Crime incidents in Los Angeles | January 2020 - May 2023",
-    "file": "Crime_Data_from_2020_to_Present.csv",
-    "src": "https://catalog.data.gov/dataset/crime-data-from-2020-to-present",
-    "real_lines": 766_103,
-    "size": (191_187, "kb"),
-}
+from data_info import DATA
 
 
 def progress_bar(progress):
@@ -46,7 +39,7 @@ def load_data(reader):
 
     # Load data
     for row_idx, row in enumerate(reader):
-        progress_bar(row_idx / (DATA["real_lines"] - 1))
+        progress_bar(row_idx / (DATA["lines"] - 2))
         data.append(row)
 
     print("\tData load complete")
