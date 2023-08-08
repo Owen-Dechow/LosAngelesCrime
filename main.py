@@ -1,33 +1,7 @@
 import csv
+from prog_bar import progress_bar
 import fortran_lib
-from colorama import Fore
-from math import floor
-from data_info import DATA
-
-
-def progress_bar(progress):
-    PASSED = "*"  # "█"
-    PROG = "-"
-    BAR_SIZE = 20
-    DECIMALS = 2
-    if progress >= 1:
-        print(
-            f"\t|{Fore.GREEN}{PASSED * BAR_SIZE}{Fore.RESET}| 100%  {' ' * (DECIMALS + 1)}"
-        )
-        return
-
-    passed_slots = floor(progress * BAR_SIZE)
-    not_passed_slots = BAR_SIZE - passed_slots
-
-    # Passed slots
-    prog_bar = "\t|" + Fore.BLUE + PASSED * passed_slots
-
-    # Non passed slots
-    prog_bar += Fore.YELLOW + PROG * not_passed_slots
-
-    # End area
-    prog_bar += f"{Fore.RESET}| {round(progress*100, DECIMALS)}%"
-    print(prog_bar, end="\r")
+from json import load as json_load
 
 
 def load_data(reader):
@@ -51,9 +25,8 @@ def main():
         print(
             "Data analysis application\n\t"
             + "Testing: Fortran Python teamwork\n\t"
-            + f"Using dataset: {DATA['dataname']}\n\t"
-            + f"From File: {DATA['file']}"
-            + f"From URL: {DATA['src']}"
+            + f"Using dataset: {DATA['file']}\n\t"
+            + f"From URL: {DATA['url']}"
         )
         reader = csv.reader(file)
         data = load_data(reader)
@@ -76,4 +49,5 @@ def main():
 
 
 if __name__ == "__main__":
+    DATA = json_load(open("data_info.json"))
     main()

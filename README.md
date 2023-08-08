@@ -26,11 +26,13 @@ Test Python's ability to work with Fortran for data analysis using, Los Angeles 
     ```bash
     $ f2py -v
     ```
-    This should output a verstion number
+    This should output a verstion number.
+    For more information/trouble shooting visit the [F2PY documentation](https://numpy.org/doc/stable/f2py/).
 
-1. [Download dataset](https://data.lacity.org/api/views/2nrs-mtv8/rows.csv?accessType=DOWNLOAD)
-
-1. Update the lines value in `data_info.py` to match the number of lines in downloaded dataset
+1. Run the setup file
+    ```bash
+    $ python3 setup.py
+    ```
 
 ## Running
 1. If changes where made to `fortran_lib.f90` or first time running
