@@ -1,31 +1,3 @@
-! 1.  DR_NO
-! 2.  Date_Rptd
-! 3.  DATE_OCC
-! 4.  TIME_OCC
-! 5.  AREA
-! 6.  AREA_NAME
-! 7.  Rpt_Dist_No
-! 8.  Part_1_2
-! 9.  Crm_Cd
-! 10. Crm_Cd_Desc
-! 11. Mocodes
-! 12. Vict_Age
-! 13. Vict_Sex
-! 14. Vict_Descent
-! 15. Premis_Cd
-! 16. Premis_Desc
-! 17. Weapon_Used_Cd
-! 18. Weapon_Desc
-! 19. Status
-! 20. Status_Desc
-! 21. Crm_Cd_1
-! 22. Crm_Cd_2
-! 23. Crm_Cd_3
-! 24. Crm_Cd_4
-! 25. LOCATION
-! 26. Cross_Street
-! 27. LAT
-! 28. LON
 module lib
 contains
 
@@ -145,4 +117,44 @@ contains
         p = i + 1
     end function partition
 
+    subroutine get_most_common(load_data, col, max_unique, max_out_length, most_common)
+        implicit none
+
+        integer :: max_out_length
+        character(*), dimension(:, :), intent(in) :: load_data
+        integer, intent(in) :: col, max_unique
+        character(max_out_length), intent(out) :: most_common
+        character(max_out_length), dimension(max_unique) :: key_pair
+        integer, dimension(max_out_length) :: value_pair
+        character(:), dimension(:), allocatable :: check_col
+        integer :: idx, idx2, location(1), fill_idx = 1, tmp(1)
+        character(:), allocatable :: str, str2
+
+        key_pair = ""
+        value_pair = 0
+
+        check_col = load_data(:, col)
+        do idx = 1, size(check_col)
+            str = check_col(idx)
+
+            location = 0
+            do idx2 = 1, size(key_pair)
+                if (key_pair(idx2) == str) then
+                    location = idx2
+                end if
+            end do
+
+            if (location(1) > 0) then
+                value_pair(location(1)) = value_pair(location(1)) + 1
+            else
+                key_pair(fill_idx) = str
+                value_pair(fill_idx) = 1
+                fill_idx = fill_idx + 1
+            end if
+        end do
+
+        tmp = maxloc(value_pair)
+        most_common = key_pair(tmp(1))
+
+    end subroutine get_most_common
 end module lib

@@ -4,3 +4,4 @@ __pycache__/
 python.exe.stackdump
 venv/
 data_info.json
+a.exe

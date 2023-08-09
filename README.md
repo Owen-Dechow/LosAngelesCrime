@@ -33,6 +33,7 @@ Test Python's ability to work with Fortran for data analysis using, Los Angeles 
     ```bash
     $ python3 setup.py
     ```
+    You should notice the file `data_info.json` was generated.
 
 ## Running
 1. If changes where made to `fortran_lib.f90` or first time running

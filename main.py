@@ -47,6 +47,13 @@ def main():
             + f"Mode: {vic_age_dat[1]}\n\t"
         )
 
+        print(
+            f"Most common crime: {fortran_lib.lib.get_most_common(data, 10, 1000, 256)}"
+        )
+        print(
+            f"Most common weapon: {fortran_lib.lib.get_most_common(data, 17, 1000, 256)}"
+        )
+
 
 if __name__ == "__main__":
     DATA = json_load(open("data_info.json"))
