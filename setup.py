@@ -15,10 +15,6 @@ if __name__ == "__main__":
             if chunk:
                 dataset_file.write(chunk)
 
-            if idx > 15:
-                r.close()
-                break
-
             spinner(idx, 0.01)
 
     print("")
