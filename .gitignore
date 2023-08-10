@@ -1,7 +1,13 @@
-Crime_Data_from_2020_to_Present.csv
 __pycache__/
-*.dll
-python.exe.stackdump
 venv/
+
+Crime_Data_from_2020_to_Present.csv
 data_info.json
+
+python.exe.stackdump
 a.exe
+*.dll
+
+test/
+test.f90
+test.py

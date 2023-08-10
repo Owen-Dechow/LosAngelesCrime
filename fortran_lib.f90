@@ -117,18 +117,18 @@ contains
         p = i + 1
     end function partition
 
-    subroutine get_most_common(load_data, col, max_unique, max_out_length, most_common)
+    subroutine get_most_common(load_data, col, max_unique, max_out_length, n_out, most_common)
         implicit none
 
-        integer :: max_out_length
+        integer :: max_out_length, n_out
         character(*), dimension(:, :), intent(in) :: load_data
         integer, intent(in) :: col, max_unique
-        character(max_out_length), intent(out) :: most_common
+        character(max_out_length), dimension(n_out), intent(out) :: most_common
         character(max_out_length), dimension(max_unique) :: key_pair
-        integer, dimension(max_out_length) :: value_pair
+        integer, dimension(max_unique) :: value_pair
         character(:), dimension(:), allocatable :: check_col
         integer :: idx, idx2, location(1), fill_idx = 1, tmp(1)
-        character(:), allocatable :: str, str2
+        character(:), allocatable :: str
 
         key_pair = ""
         value_pair = 0
@@ -144,17 +144,70 @@ contains
                 end if
             end do
 
-            if (location(1) > 0) then
-                value_pair(location(1)) = value_pair(location(1)) + 1
-            else
-                key_pair(fill_idx) = str
-                value_pair(fill_idx) = 1
-                fill_idx = fill_idx + 1
+            if (str /= "") then
+                if (location(1) > 0) then
+                    value_pair(location(1)) = value_pair(location(1)) + 1
+                else
+                    key_pair(fill_idx) = str
+                    value_pair(fill_idx) = 1
+                    fill_idx = fill_idx + 1
+                end if
             end if
         end do
 
-        tmp = maxloc(value_pair)
-        most_common = key_pair(tmp(1))
+        do idx = 1, size(most_common)
+            tmp = maxloc(value_pair)
+            value_pair(tmp(1)) = -1
+            most_common(idx) = trim(key_pair(tmp(1)))
+        end do
 
     end subroutine get_most_common
+
+    subroutine get_most_common_counted(load_data, col, max_unique, max_out_length, n_out, most_common, counted)
+        implicit none
+
+        integer :: max_out_length, n_out
+        character(*), dimension(:, :), intent(in) :: load_data
+        integer, intent(in) :: col, max_unique
+        character(max_out_length), dimension(n_out), intent(out) :: most_common
+        integer, dimension(n_out), intent(out) :: counted
+        character(max_out_length), dimension(max_unique) :: key_pair
+        integer, dimension(max_unique) :: value_pair
+        character(:), dimension(:), allocatable :: check_col
+        integer :: idx, idx2, location(1), fill_idx = 1, tmp(1)
+        character(:), allocatable :: str
+
+        key_pair = ""
+        value_pair = 0
+
+        check_col = load_data(:, col)
+        do idx = 1, size(check_col)
+            str = check_col(idx)
+
+            location = 0
+            do idx2 = 1, size(key_pair)
+                if (key_pair(idx2) == str) then
+                    location = idx2
+                end if
+            end do
+
+            if (str /= "") then
+                if (location(1) > 0) then
+                    value_pair(location(1)) = value_pair(location(1)) + 1
+                else
+                    key_pair(fill_idx) = str
+                    value_pair(fill_idx) = 1
+                    fill_idx = fill_idx + 1
+                end if
+            end if
+        end do
+
+        do idx = 1, size(most_common)
+            tmp = maxloc(value_pair)
+            most_common(idx) = key_pair(tmp(1))
+            counted(idx) = value_pair(tmp(1))
+            value_pair(tmp(1)) = -1
+        end do
+
+    end subroutine get_most_common_counted
 end module lib
