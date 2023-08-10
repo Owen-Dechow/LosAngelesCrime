@@ -15,23 +15,34 @@ if __name__ == "__main__":
             if chunk:
                 dataset_file.write(chunk)
 
+            if idx > 15:
+                r.close()
+                break
+
             spinner(idx, 0.01)
 
     print("")
     print("Collecting Information")
 
     with open(dataset_filename, "r") as dataset_file:
-        lines = 0
-        for line in dataset_file:
-            lines += 1
+        line_count = 0
+        first_line = None
+        for current_line in dataset_file:
+            line_count += 1
+            if first_line is None:
+                first_line = current_line
 
         datainfo_dict = {}
         datainfo_dict["url"] = url
-        datainfo_dict["lines"] = lines
+        datainfo_dict["lines"] = line_count
         datainfo_dict["file"] = dataset_file.name
         datainfo_dict["response_headers"] = dict(r.headers)
 
         with open("data_info.json", "w") as datainfo_file:
             json.dump(datainfo_dict, datainfo_file)
+
+        with open("col_info.txt", "w") as colinfo_file:
+            for idx, col in enumerate(first_line.split(",")):
+                colinfo_file.write(f"{idx+1}. {col}\n")
 
     print("Setup complete")

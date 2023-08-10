@@ -1,8 +1,10 @@
 __pycache__/
 venv/
+.vscode/
 
 Crime_Data_from_2020_to_Present.csv
 data_info.json
+col_info.txt
 
 python.exe.stackdump
 a.exe
